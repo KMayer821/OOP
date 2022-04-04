@@ -1,0 +1,32 @@
+using System;
+
+namespace ConsoleApp1
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Hero userHero = new Hero("Боромир");
+            userHero.WriteHeroInformation();
+        }
+    }
+
+    class Hero
+    {
+        public string Name;
+        public int Health;
+        public int Gold;
+
+        public Hero(string Name)
+        {
+            this.Name = Name;
+            Health = 100;
+            Gold = 0;
+        }
+
+        public void WriteHeroInformation()
+        {
+            Console.WriteLine($"Имя - {Name}\n{Health} очков здоровья\n{Gold} золота");
+        }
+    }
+}
