@@ -13,20 +13,20 @@ namespace ConsoleApp1
 
     class Hero
     {
-        public string Name;
-        public int Health;
-        public int Gold;
+        private string _name;
+        private int _health;
+        private int _gold;
 
         public Hero(string Name)
         {
-            this.Name = Name;
-            Health = 100;
-            Gold = 0;
+            this._name = Name;
+            _health = 100;
+            _gold = 0;
         }
 
         public void WriteHeroInformation()
         {
-            Console.WriteLine($"Имя - {Name}\n{Health} очков здоровья\n{Gold} золота");
+            Console.WriteLine($"Имя - {_name}\n{_health} очков здоровья\n{_gold} золота");
         }
     }
 }
