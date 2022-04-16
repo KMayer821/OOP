@@ -26,7 +26,7 @@ namespace ConsoleApp1
 
             public void DrawMap(Hero addedHero)
             {
-                map[addedHero.XPosition, addedHero.YPosition] = 'A';
+                map[addedHero.xPosition, addedHero.yPosition] = 'A';
 
                 for (int i = 0; i < map.GetLength(0); i++)
                 {
@@ -41,13 +41,13 @@ namespace ConsoleApp1
 
     class Hero 
     {
-        public int XPosition { get; private set; }
-        public int YPosition { get; private set; }
+        public int xPosition { get; private set; }
+        public int yPosition { get; private set; }
         
-        public Hero(int XPosition = 1, int YPosition = 1)
+        public Hero(int xPosition = 1, int yPosition = 1)
         {
-            this.XPosition = XPosition;
-            this.YPosition = YPosition;
+            this.xPosition = xPosition;
+            this.yPosition = yPosition;
         }
     }
 }
