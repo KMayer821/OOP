@@ -7,45 +7,18 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             Hero firstHero = new Hero(3,3);
-            Map map = new Map();
-            GameDrawer game = new GameDrawer(firstHero, map);
+            GameDrawer game = new GameDrawer(firstHero);
         }
     }
 
     class GameDrawer
     {
-        public GameDrawer(Hero hero, Map map)
+        public GameDrawer(Hero hero)
         {
-            char[,] gameMap = map.GetMap();
-            gameMap[hero.XPosition, hero.YPosition] = 'A';
-
-            for (int i = 0; i < gameMap.GetLength(0); i++)
-            {
-                for (int j = 0; j < gameMap.GetLength(1); j++)
-                {
-                    Console.Write(gameMap[i, j]);
-                }
-                Console.Write("\n");
-            }
+            Console.SetCursorPosition(hero.XPosition, hero.YPosition);
+            Console.Write('H');
         }
     }
-
-    class Map 
-    {
-        private char[,] _grid = {{'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
-                           {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
-                           {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
-                           {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
-                           {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
-                           {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
-                           {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
-                           {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
-                           {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' } };
-        public char[,] GetMap()
-        {
-            return _grid;
-        }
-     }
 
     class Hero 
     {
