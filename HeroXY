@@ -9,7 +9,6 @@ namespace ConsoleApp1
             Hero firstHero = new Hero(3,3);
             Map map = new Map();
             GameDrawer game = new GameDrawer(firstHero, map);
-
         }
     }
 
@@ -17,13 +16,14 @@ namespace ConsoleApp1
     {
         public GameDrawer(Hero hero, Map map)
         {
-            map.grid[hero.XPosition, hero.YPosition] = 'A';
+            char[,] gameMap = map.GetMap();
+            gameMap[hero.XPosition, hero.YPosition] = 'A';
 
-            for (int i = 0; i < map.grid.GetLength(0); i++)
+            for (int i = 0; i < gameMap.GetLength(0); i++)
             {
-                for (int j = 0; j < map.grid.GetLength(1); j++)
+                for (int j = 0; j < gameMap.GetLength(1); j++)
                 {
-                    Console.Write(map.grid[i, j]);
+                    Console.Write(gameMap[i, j]);
                 }
                 Console.Write("\n");
             }
@@ -32,7 +32,7 @@ namespace ConsoleApp1
 
     class Map 
     {
-        public char[,] grid { get; private set; } = {{'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
+        private char[,] _grid = {{'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
                            {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                            {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                            {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
@@ -41,6 +41,10 @@ namespace ConsoleApp1
                            {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                            {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                            {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' } };
+        public char[,] GetMap()
+        {
+            return _grid;
+        }
      }
 
     class Hero 
