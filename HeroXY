@@ -1,0 +1,51 @@
+using System;
+
+namespace ConsoleApp1
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Hero firstHero = new Hero(3,3);
+            firstHero.DrawMap();
+        }
+    }
+
+    class Map
+        {
+            protected char[,] _map = {{'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
+                           {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
+                           {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
+                           {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
+                           {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
+                           {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
+                           {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
+                           {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
+                           {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' } };
+            public void DrawMap()
+            {
+                for (int i = 0; i < _map.GetLength(0); i++)
+                {
+                    for (int j = 0; j < _map.GetLength(1); j++)
+                    {
+                        Console.Write(_map[i, j]);
+                    }
+                    Console.Write("\n");
+                }
+            }
+        }
+
+    class Hero : Map
+    {
+        public int _xPosition { get; private set; }
+        public int _yPosition { get; private set; }
+        
+
+        public Hero(int x = 1, int y = 1)
+        {
+            _xPosition = x;
+            _yPosition = y;
+            _map[_xPosition, _yPosition] = '@';
+        }
+    }
+}
