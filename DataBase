@@ -11,7 +11,7 @@ namespace ConsoleApp1
         }
     }
 
-    class UserDataBase
+    class UserDataBase 
     {
         private List<User> _users = new List<User>();
 
@@ -87,20 +87,16 @@ namespace ConsoleApp1
                 {
                     Show(dataBase);
                 }
-                else if(_userInput == _banWord)
-                {
-                    Console.WriteLine("id = ...");
-                }
             }
         }
 
         private void Show(UserDataBase dataBase)
         {
-            List<User> _users = dataBase.GetDataBase();
+            List<User> users = dataBase.GetDataBase();
             
-            for (int i = 0; i < _users.Count; i++)
+            for (int i = 0; i < users.Count; i++)
             {
-                Console.WriteLine(_users[i].GetName());
+                Console.WriteLine(users[i].GetName() + " whith level:" + users[i].GetLevel());
             }
         }
 
@@ -109,7 +105,7 @@ namespace ConsoleApp1
             Console.WriteLine("name = ...");
             string name = Console.ReadLine();
             Console.WriteLine("level = ...");
-            int level = Console.Read();
+            int level = Convert.ToInt32(Console.ReadLine());
             User user = new User(name, level);
             dataBase.AddUser(user);
         }
@@ -118,9 +114,8 @@ namespace ConsoleApp1
         {
             int id;
             Console.WriteLine("id = ...");
-            id = Console.Read();
-            Console.WriteLine(dataBase.GetDataBase().Count);
-            dataBase.RemoveUser(0);
+            id = Convert.ToInt32(Console.ReadLine());
+            dataBase.RemoveUser(id);
         }
     }
 }
