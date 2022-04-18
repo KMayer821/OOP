@@ -1,0 +1,134 @@
+using System;
+
+namespace ConsoleApp1
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            UserDataBase userData = new UserDataBase();
+            UI ui = new UI(userData);
+        }
+    }
+
+    class UserDataBase
+    {
+        private List<User> _users = new List<User>();
+
+        public void AddUser(User user)
+        {
+            _users.Add(user);
+        }
+
+        public void RemoveUser(int id)
+        {
+            _users.RemoveAt(id);
+        }
+
+        public List<User> GetDataBase()
+        {
+            return _users;
+        }
+    }
+
+    class User
+    {
+        protected int id;
+        protected string name;
+        protected int level;
+        protected bool banned;
+
+        public User(string name, int level, bool banned = false)
+        {
+            this.name = name;
+            this.level = level;
+            this.banned = banned;
+        }
+
+        public string GetName()
+        {
+            return name;
+        }
+        public int GetLevel()
+        {
+            return level;
+        }
+        public bool GetStatus()
+        {
+            return banned;
+        }
+    }
+
+    class UI
+    {
+        private string _stopWord = "exit";
+        private string _addWord = "add";
+        private string _removeWord = "rem";
+        private string _banWord = "ban";
+        private string _showWord = "show";
+        private string _userInput = "";
+        public UI(UserDataBase dataBase)
+        {
+            Console.WriteLine("Commands: eixt, add, rem, ban, show");
+            
+            while (_userInput != _stopWord)
+            {
+                _userInput = Console.ReadLine();
+
+                if (_userInput == _addWord)
+                {
+                    AddUser(dataBase);
+                }
+                else if (_userInput == _removeWord)
+                {
+                    RemoveUser(dataBase);
+                }
+                else if (_userInput == _showWord)
+                {
+                    Show(dataBase);
+                }
+                else if(_userInput == _banWord)
+                {
+                    Console.WriteLine("id = ...");
+                }
+            }
+        }
+
+        private void Show(UserDataBase dataBase)
+        {
+            List<User> _users = dataBase.GetDataBase();
+            
+            for (int i = 0; i < _users.Count; i++)
+            {
+                Console.WriteLine(_users[i].GetName());
+            }
+        }
+
+        private void AddUser(UserDataBase dataBase)
+        {
+            Console.WriteLine("name = ...");
+            string name = Console.ReadLine();
+            Console.WriteLine("level = ...");
+            int level = Console.Read();
+            User user = new User(name, level);
+            dataBase.AddUser(user);
+        }
+
+        private void RemoveUser(UserDataBase dataBase)
+        {
+            int id;
+            Console.WriteLine("id = ...");
+            id = Console.Read();
+            Console.WriteLine(dataBase.GetDataBase().Count);
+            dataBase.RemoveUser(0);
+        }
+    }
+}
+
+
+/*
+ Реализовать базу данных игроков и методы для работы с ней.
+У игрока может быть уникальный номер, ник, уровень, флаг – забанен ли он(флаг - bool).
+Реализовать возможность добавления игрока, бана игрока по уникальный номеру, разбана игрока по уникальный номеру и удаление игрока.
+Создание самой БД не требуется, задание выполняется инструментами, которые вы уже изучили в рамках курса. Но нужен класс, который содержит игроков и её можно назвать "База данных".
+*/
