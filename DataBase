@@ -7,74 +7,11 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             UserDataBase userData = new UserDataBase();
-            UI ui = new UI(userData);
+            userData.GetInterface();
         }
     }
 
     class UserDataBase 
-    {
-        private List<User> _users = new List<User>();
-
-        public void AddUser(User user)
-        {
-            _users.Add(user);
-        }
-
-        public void RemoveUser(int id)
-        {
-            _users.RemoveAt(id);
-        }
-
-        public List<User> GetDataBase()
-        {
-            return _users;
-        }
-        
-        public void UpdateDataBase(List<User> users)
-        {
-            _users = users;
-        }
-    }
-
-    class User
-    {
-        protected int id;
-        protected string name;
-        protected int level;
-        protected bool banned;
-
-        public User(string name, int level, bool banned = false)
-        {
-            this.name = name;
-            this.level = level;
-            this.banned = banned;
-        }
-
-        public string GetName()
-        {
-            return name;
-        }
-        public int GetLevel()
-        {
-            return level;
-        }
-        public bool GetStatus()
-        {
-            return banned;
-        }
-
-        public void Ban()
-        {
-            banned = true;
-        }
-
-        public void Unban()
-        {
-            banned = false;  
-        }
-    }
-
-    class UI
     {
         private string _stopWord = "exit";
         private string _addWord = "add";
@@ -84,76 +21,140 @@ namespace ConsoleApp1
         private string _showWord = "show";
         private string _userInput = "";
         private int _id;
-        private List<User> users = new List<User>(); 
-        public UI(UserDataBase dataBase)
+        private List<User> _users = new List<User>();
+
+        public void GetInterface()
         {
-            users = dataBase.GetDataBase();
             Console.WriteLine("Commands: eixt, add, rem, ban, show, unban");
-            
+
             while (_userInput != _stopWord)
             {
                 _userInput = Console.ReadLine();
 
                 if (_userInput == _addWord)
                 {
-                    AddUser(dataBase);
+                    AddUser();
                 }
                 else if (_userInput == _removeWord)
                 {
-                    RemoveUser(dataBase);
+                    RemoveUser();
                 }
                 else if (_userInput == _showWord)
                 {
-                    Show(dataBase);
+                    Show();
                 }
                 else if (_userInput == _banWord)
                 {
-                    BanUser(dataBase);
+                    BanUser();
                 }
                 else if (_userInput == _unbanWord)
                 {
-                    UnbanUser(dataBase);
+                    UnbanUser();
                 }
-                dataBase.UpdateDataBase(users);
             }
         }
 
-        private void BanUser(UserDataBase dataBase)
-        {
-            Console.WriteLine("id = ...");
-            _id = Convert.ToInt32(Console.ReadLine());
-            users[_id].Ban();
-        }
-        private void UnbanUser(UserDataBase dataBase)
-        {
-            Console.WriteLine("id = ...");
-            _id = Convert.ToInt32(Console.ReadLine());
-            users[_id].Unban();
-        }
-
-        private void Show(UserDataBase dataBase)
-        {
-            for (int i = 0; i < users.Count; i++)
-            {
-                Console.WriteLine(users[i].GetName() + " whith level:" + users[i].GetLevel() + " and ban status: " + users[i].GetStatus());
-            }
-        }
-
-        private void AddUser(UserDataBase dataBase)
+        public void AddUser()
         {
             Console.WriteLine("name = ...");
             string name = Console.ReadLine();
             Console.WriteLine("level = ...");
-            int level = Convert.ToInt32(Console.ReadLine());
+            int level = 1;
+            _userInput = Console.ReadLine();
+
+            if (int.TryParse(_userInput,out level) == false)
+            {
+                Console.WriteLine("not a number");
+            }
+            else
+            { 
             User user = new User(name, level);
-            dataBase.AddUser(user);
+            _users.Add(user);
+            }
         }
 
-        private void RemoveUser(UserDataBase dataBase)
+        public void RemoveUser()
         {
             Console.WriteLine("id = ...");
-            _id = Convert.ToInt32(Console.ReadLine());
-            dataBase.RemoveUser(_id);
+            _userInput = Console.ReadLine();
+
+            if (int.TryParse(_userInput,out _id) == true)
+            {
+                _users.RemoveAt(_id);
+            }
+            else
+            {
+                Console.WriteLine("not a number");
+            }
+        }
+
+        private void BanUser()
+        {
+            Console.WriteLine("id = ...");
+            _userInput = Console.ReadLine();
+
+            if (int.TryParse(_userInput,out _id) == true)
+            {
+                _users[_id].Ban();
+            }
+            else
+            {
+                Console.WriteLine("not a number");
+            }
+        }
+        private void UnbanUser()
+        {
+            Console.WriteLine("id = ...");
+            _userInput = Console.ReadLine();
+
+            if (int.TryParse(_userInput, out _id) == true)
+            {
+                _users[_id].Ban();
+            }
+            else
+            {
+                Console.WriteLine("not a number");
+            }
+        }
+
+        private void Show()
+        {
+            for (int i = 0; i < _users.Count; i++)
+            {
+                Console.WriteLine(_users[i].Name + " whith level:" + _users[i].Level + " and ban status: " + _users[i].Banned);
+            }
+        }
+    }
+
+    class User
+    {
+        public bool Banned { get; private set; }
+        public int Level { get; private set; }
+        public string Name { get; private set; }
+
+        public User(string name, int level, bool banned = false)
+        {
+            this.Name = name;
+            this.Level = level;
+            this.Banned = banned;
+        }
+
+        public void Ban()
+        {
+            Banned = true;
+        }
+
+        public void Unban()
+        {
+            Banned = false;  
         }
     }
 }
+
+
+/*
+ Реализовать базу данных игроков и методы для работы с ней.
+У игрока может быть уникальный номер, ник, уровень, флаг – забанен ли он(флаг - bool).
+Реализовать возможность добавления игрока, бана игрока по уникальный номеру, разбана игрока по уникальный номеру и удаление игрока.
+Создание самой БД не требуется, задание выполняется инструментами, которые вы уже изучили в рамках курса. Но нужен класс, который содержит игроков и её можно назвать "База данных".
+*/
