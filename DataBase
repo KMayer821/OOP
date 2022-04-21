@@ -64,7 +64,7 @@ namespace ConsoleApp1
 
             if (int.TryParse(_userInput,out level) == false)
             {
-                Console.WriteLine("not a number");
+                Console.WriteLine("Error");
             }
             else
             { 
@@ -78,13 +78,13 @@ namespace ConsoleApp1
             Console.WriteLine("id = ...");
             _userInput = Console.ReadLine();
 
-            if (int.TryParse(_userInput,out _id) == true)
+            if (int.TryParse(_userInput,out _id) == true && TryId(_id))
             {
                 _users.RemoveAt(_id);
             }
             else
             {
-                Console.WriteLine("not a number");
+                Console.WriteLine("Error");
             }
         }
 
@@ -93,13 +93,13 @@ namespace ConsoleApp1
             Console.WriteLine("id = ...");
             _userInput = Console.ReadLine();
 
-            if (int.TryParse(_userInput,out _id) == true)
+            if (int.TryParse(_userInput,out _id) == true && TryId(_id))
             {
                 _users[_id].Ban();
             }
             else
             {
-                Console.WriteLine("not a number");
+                Console.WriteLine("Error");
             }
         }
         private void UnbanUser()
@@ -107,13 +107,13 @@ namespace ConsoleApp1
             Console.WriteLine("id = ...");
             _userInput = Console.ReadLine();
 
-            if (int.TryParse(_userInput, out _id) == true)
+            if (int.TryParse(_userInput, out _id) == true && TryId(_id))
             {
                 _users[_id].Ban();
             }
             else
             {
-                Console.WriteLine("not a number");
+                Console.WriteLine("Error");
             }
         }
 
@@ -122,6 +122,18 @@ namespace ConsoleApp1
             for (int i = 0; i < _users.Count; i++)
             {
                 Console.WriteLine(_users[i].Name + " whith level:" + _users[i].Level + " and ban status: " + _users[i].Banned);
+            }
+        }
+        
+        private bool TryId(int id)
+        {
+            if (id < _users.Count)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }
