@@ -21,11 +21,12 @@ namespace ConsoleApp1
         private string _showWord = "show";
         private string _userInput = "";
         private int _id;
+        User user = new User("virtual", 1);
         private List<User> _users = new List<User>();
 
         public void GetInterface()
         {
-            Console.WriteLine("Commands: eixt, add, rem, ban, show, unban");
+            Console.WriteLine("Commands: exit, add, rem, ban, show, unban");
 
             while (_userInput != _stopWord)
             {
@@ -54,6 +55,22 @@ namespace ConsoleApp1
             }
         }
 
+        public bool TryGetUser()
+        {
+            Console.WriteLine("id..");
+            _userInput = Console.ReadLine();
+
+            if (int.TryParse(_userInput, out _id) && (_id < _users.Count && _id >= 0))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+                Console.WriteLine("Error");
+            }
+        }
+
         public void AddUser()
         {
             Console.WriteLine("name = ...");
@@ -68,52 +85,43 @@ namespace ConsoleApp1
             }
             else
             { 
-            User user = new User(name, level);
-            _users.Add(user);
+            User player = new User(name, level);
+            _users.Add(player);
             }
         }
 
         public void RemoveUser()
         {
-            Console.WriteLine("id = ...");
-            _userInput = Console.ReadLine();
-
-            if (int.TryParse(_userInput,out _id) == true && TryId(_id))
+            if (TryGetUser() == true)
             {
                 _users.RemoveAt(_id);
             }
             else
             {
-                Console.WriteLine("Error");
+                Console.Write("Error\n");
             }
         }
 
         private void BanUser()
         {
-            Console.WriteLine("id = ...");
-            _userInput = Console.ReadLine();
-
-            if (int.TryParse(_userInput,out _id) == true && TryId(_id))
+            if (TryGetUser() == true)
             {
                 _users[_id].Ban();
             }
             else
             {
-                Console.WriteLine("Error");
+                Console.Write("Error\n");
             }
         }
         private void UnbanUser()
         {
-            Console.WriteLine("id = ...");
-            _userInput = Console.ReadLine();
-
-            if (int.TryParse(_userInput, out _id) == true && TryId(_id))
+            if (TryGetUser() == true)
             {
-                _users[_id].Ban();
+                _users[_id].Unban();
             }
             else
             {
-                Console.WriteLine("Error");
+                Console.Write("Error\n");
             }
         }
 
@@ -122,18 +130,6 @@ namespace ConsoleApp1
             for (int i = 0; i < _users.Count; i++)
             {
                 Console.WriteLine(_users[i].Name + " whith level:" + _users[i].Level + " and ban status: " + _users[i].Banned);
-            }
-        }
-        
-        private bool TryId(int id)
-        {
-            if (id < _users.Count)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
     }
