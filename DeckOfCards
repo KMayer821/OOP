@@ -1,0 +1,124 @@
+using System;
+
+namespace ConsoleApp1
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Player player = new Player();
+            player.GetInterface();
+        }
+    }
+
+    class Card
+    {
+        public int Suit { get; private set; }
+        public int Name { get; private set; }
+        public Card(int suit, int name)
+        {
+            Suit = suit;
+            Name = name;
+        }
+    }
+
+    class Deck
+    {
+        private List<Card> _deckOfCards = new List<Card>();
+        static private int _numberCardsInDeck = 52;
+        static private int _numberOfSuits = 4;
+        private int _numberCardsNames = _numberCardsInDeck / _numberOfSuits;
+
+        public Deck()
+        {
+            for(int i = 0; i < _numberOfSuits; i++)
+            {
+                for (int j = 0; j < _numberCardsNames; j++)
+                {
+                    Card newCard = new Card(i,j);
+                    _deckOfCards.Add(newCard);
+                }
+            }
+            ShakeTheDeck();
+        }
+
+        private void ShakeTheDeck()
+        {
+            Random random = new Random();
+            for (int i = 0; i < _numberCardsInDeck; i++)
+            {
+                int randomIndex = random.Next(0, _deckOfCards.Count);
+                Card tempCard = _deckOfCards[i];
+                _deckOfCards[i] = _deckOfCards[randomIndex];
+                _deckOfCards[randomIndex] = tempCard;
+            }
+        }
+
+        public Card GiveCard()
+        {
+            if (_deckOfCards.Count == 0)
+            {
+                Console.WriteLine("Deck is empty!");
+                return null;
+            }
+            else
+            {
+                Card lastCardInDeck = _deckOfCards[_deckOfCards.Count - 1];
+                _deckOfCards.Remove(lastCardInDeck);
+                return lastCardInDeck;
+            }
+        }
+    }
+
+    class Player
+    {
+        Deck deck = new Deck();
+        List<Card> _playerHand = new List<Card>();
+        private string _userInput;
+        private string _getCard = "more";
+        private string _playerCardsInformation = "inf";
+        private string _exitWord = "exit";
+        private string _newGame = "new";
+
+        public void GetInterface()
+        {
+            Console.WriteLine("Commands: more, inf, exit");
+
+            while (_userInput != _exitWord)
+            {
+                _userInput = Console.ReadLine();
+                
+                if (_userInput == _playerCardsInformation)
+                {
+                    Information();
+                }
+                else if (_userInput == _getCard)
+                {
+                    GetCard();
+                }
+            }
+        }
+
+        private void Information()
+        {
+            for (int i = 0; i < _playerHand.Count; i++)
+            {
+                Console.WriteLine(_playerHand[i].Suit + " " + _playerHand[i].Name + "\n");
+            }
+        }
+
+        private void GetCard()
+        {
+            Card takingCard = new Card(default, default);
+            takingCard = deck.GiveCard();
+            if (takingCard != null)
+            {
+                _playerHand.Add(takingCard);
+            }
+        }
+    }
+}
+/*Есть колода с картами. Игрок достает карты, 
+ * пока не решит, что ему хватит карт (может быть как выбор пользователя, так и количество сколько карт надо взять). 
+ * После выводиться вся информация о вытянутых картах.
+Возможные классы: Карта, Колода, Игрок.*/
