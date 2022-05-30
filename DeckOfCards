@@ -24,9 +24,9 @@ namespace ConsoleApp1
 
     class Deck
     {
-        private List<Card> _deckOfCards = new List<Card>();
         private static int _numberCardsInDeck = 52;
         private static int _numberOfSuits = 4;
+        private List<Card> _deckOfCards = new List<Card>();
         private int _numberCardsNames = _numberCardsInDeck / _numberOfSuits;
 
         public Deck()
@@ -72,7 +72,7 @@ namespace ConsoleApp1
 
     class Player
     {
-        private Deck deck = new Deck();
+        private Deck _deck = new Deck();
         private List<Card> _playerHand = new List<Card>();
         private string _userInput;
         private string _getCard = "more";
