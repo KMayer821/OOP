@@ -1,0 +1,131 @@
+using System;
+
+namespace ConsoleApp2
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Library library = new Library();
+            library.GetInterface();
+        }
+    }
+
+    class Book
+    {
+        public string Name { get; private set; }
+        public string Autor { get; private set; }
+        public string ReleaseDate { get; private set; }
+
+        public Book(string name, string autor, string date)
+        {
+            Name = name;
+            Autor = autor;
+            ReleaseDate = date;
+        }
+    }
+
+    class Library
+    {
+        private List<Book> _library = new List<Book>();
+        private string _userInput;
+        private string _add = "add";
+        private string _remove = "rem";
+        private string _exitWord = "exit";
+        private string _search = "search";
+        private string _show = "show";
+
+        public void GetInterface()
+        {
+            Console.WriteLine("Commands: add, rem, search, show, exit");
+
+            while (_userInput != _exitWord)
+            {
+                _userInput = Console.ReadLine();
+
+                if (_userInput == _add)
+                {
+                    AddBook();
+                }
+                else if (_userInput == _search)
+                {
+                    SearchBook();
+                }
+                else if (_userInput == _show)
+                {
+                    ShowLibrary();
+                }
+                else if (_userInput == _remove)
+                {
+                    RemoveBook();
+                }
+            }
+        }
+
+        private void AddBook()
+        {
+            Console.WriteLine("book name..");
+            string name = Console.ReadLine();
+            Console.WriteLine("autor name..");
+            string autor = Console.ReadLine();
+            Console.WriteLine("book release date..");
+            string date = Console.ReadLine();
+            Book book = new Book(name, autor, date);
+            _library.Add(book);
+        }
+
+        private void ShowLibrary()
+        {
+            for (int i = 0; i < _library.Count; i++)
+            {
+                Console.WriteLine(i + 1 + ") Name:" + _library[i].Name + " wroten by " + _library[i].Autor + " in " + _library[i].ReleaseDate);
+            }
+        }
+
+        private void SearchBook()
+        {
+            Console.WriteLine("1 for searching by name\n 2 for searching by autor\n 3 for searching by release date");
+            string userInput = Console.ReadLine();
+
+            if (userInput != "1" && userInput != "2" && userInput != "3")
+            {
+                Console.WriteLine("input error");
+            }
+            else 
+            {
+                Console.WriteLine("write sample: ");
+                string sample = Console.ReadLine();
+                for (int i = 0; i < _library.Count; i++)
+                {
+                    if (userInput == "1" && _library[i].Name == sample)
+                    {
+                        Console.WriteLine(i + 1 + ") Name:" + _library[i].Name + " wroten by " + _library[i].Autor + " in " + _library[i].ReleaseDate);
+                    }
+                    else if (userInput == "2" && _library[i].Autor == sample)
+                    {
+                        Console.WriteLine(i + 1 + ") Name:" + _library[i].Name + " wroten by " + _library[i].Autor + " in " + _library[i].ReleaseDate);
+                    }
+                    else if (userInput == "3" && _library[i].ReleaseDate == sample)
+                    {
+                        Console.WriteLine(i + 1 + ") Name:" + _library[i].Name + " wroten by " + _library[i].Autor + " in " + _library[i].ReleaseDate);
+                    }
+                }
+            }
+        }
+
+        private void RemoveBook()
+        {
+            int bookId;
+            ShowLibrary();
+            Console.WriteLine("choose book by number to remove");
+            if (int.TryParse(Console.ReadLine(), out bookId) == false || bookId > _library.Count || bookId <= 0)
+            {
+                Console.WriteLine("error");
+            }
+            else
+            {
+                _library.RemoveAt(bookId - 1);
+            }
+        }
+    }
+}
