@@ -78,7 +78,7 @@ namespace ConsoleApp2
         {
             for (int i = 0; i < _library.Count; i++)
             {
-                Console.WriteLine(i + 1 + ") Name:" + _library[i].Name + " wroten by " + _library[i].Autor + " in " + _library[i].ReleaseDate);
+                ShowBook(i);
             }
         }
 
@@ -99,18 +99,23 @@ namespace ConsoleApp2
                 {
                     if (userInput == "1" && _library[i].Name == sample)
                     {
-                        Console.WriteLine(i + 1 + ") Name:" + _library[i].Name + " wroten by " + _library[i].Autor + " in " + _library[i].ReleaseDate);
+                        ShowBook(i);
                     }
                     else if (userInput == "2" && _library[i].Autor == sample)
                     {
-                        Console.WriteLine(i + 1 + ") Name:" + _library[i].Name + " wroten by " + _library[i].Autor + " in " + _library[i].ReleaseDate);
+                        ShowBook(i);
                     }
                     else if (userInput == "3" && _library[i].ReleaseDate == sample)
                     {
-                        Console.WriteLine(i + 1 + ") Name:" + _library[i].Name + " wroten by " + _library[i].Autor + " in " + _library[i].ReleaseDate);
+                        ShowBook(i);
                     }
                 }
             }
+        }
+
+        private void ShowBook(int index)
+        {
+            Console.WriteLine(index + 1 + ") Name:" + _library[index].Name + " wroten by " + _library[index].Autor + " in " + _library[index].ReleaseDate);
         }
 
         private void RemoveBook()
