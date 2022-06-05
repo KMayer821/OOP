@@ -1,0 +1,176 @@
+using System;
+
+namespace ConsoleApp3
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Plan plan = new Plan();
+        }
+    }
+
+    class Train
+    {
+        private List<Van> train = new List<Van>();
+        private int _numberOfPassengers;
+        public Train(int numberPassengers)
+        {
+            _numberOfPassengers = numberPassengers;
+            while (IsCompleted() == false)
+            {
+                train.Add(new Van());
+            }
+        }
+
+        public bool IsCompleted()
+        {
+            int currentMaximumOfPassengers= 0; 
+            for (int i = 0; i < train.Count; i++)
+            {
+                currentMaximumOfPassengers += train[i].Capacity;
+            }
+            if (currentMaximumOfPassengers >= _numberOfPassengers)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public int GetVansNumber()
+        {
+            return train.Count;
+        }
+    }
+
+    class Van
+    {
+        public int Capacity { get; private set; }
+        private int _minimumCapacity = 50;
+        private int _maximumCapacity = 150;
+        
+        public Van()
+        {
+            Random random = new Random();
+            Capacity = random.Next(_minimumCapacity, _maximumCapacity);
+        }
+    }
+
+    class Plan
+    {
+        private string _userInput;
+        private string _exit = "EXIT";
+        private string _createDerection = "CREATE";
+        private string _sellTickets = "SELL";
+        private string _formTrain = "FORM";
+        private string _submitTrain = "SUBMIT";
+        private bool _isDirectionCreated = false;
+        private bool _isTicketsSold = false;
+        private bool _isTrainFormed = false;
+        private bool _isTrainGone = false;
+        private int _numberPassengers;
+        private int _numberVans;
+        private List<string> _direction = new List<string>();
+
+        public Plan()
+        {
+            while (_userInput != _exit)
+            {
+                Console.Clear();
+                ShowInfoiormation();
+                Console.WriteLine("Commands: CREATE -> SELL -> FORM -> SUBMIT");
+                _userInput = Console.ReadLine();
+                
+                if (_userInput == _createDerection)
+                {
+                    CreateDirection();
+                }
+                else if (_userInput == _sellTickets && _isDirectionCreated == true)
+                {
+                    SellTickets();
+                }
+                else if (_userInput == _formTrain && _isTicketsSold == true)
+                {
+                    FormTrain();
+                }
+                else if (_userInput == _submitTrain && _isTrainFormed == true)
+                {
+                    SubmitTrain();
+                }
+            }
+        }
+
+        private void CreateDirection()
+        {
+            _direction.Clear();
+            Console.Write("Start city --  ");
+            _direction.Add(Console.ReadLine());
+            Console.Write("End city --  ");
+            _direction.Add(Console.ReadLine());
+            _isDirectionCreated = true;
+            _isTicketsSold = false;
+            _isTrainFormed = false;
+            _isTrainGone = false;
+        }
+
+        public void SellTickets()
+        {
+            int minimumPassengers = 50;
+            int maximumPassegngers = 10000;
+            Random random = new Random();
+            _numberPassengers = random.Next(minimumPassengers, maximumPassegngers);
+            _isTicketsSold = true;
+            _isTrainFormed = false;
+        }
+
+        public void FormTrain()
+        {
+            _userInput = Console.ReadLine();
+            Train train = new Train(_numberPassengers);
+            _numberVans = train.GetVansNumber();
+            _isTrainFormed = true;
+        }
+
+        public void SubmitTrain()
+        {
+            _isDirectionCreated = false;
+            _isTicketsSold = false;
+            _isTrainFormed = false;
+            _isTrainGone = true; 
+        }
+
+        public void ShowInfoiormation()
+        {
+            string information = "";
+            if (_isDirectionCreated == true)
+            {
+                information += _direction[0] + " - " + _direction[1];
+            }
+            if (_isTicketsSold == true)
+            {
+                information += " with " + _numberPassengers + " passengers";
+            }
+            if (_isTrainFormed == true)
+            {
+                information += "; train consists of " + _numberVans + " vans";
+            }
+            if (_isTrainGone == true)
+            {
+                information = "WELL DONE..";
+            }
+            Console.WriteLine(information);
+        }
+    }
+}
+
+
+//У вас есть программа, которая помогает пользователю составить план поезда.
+//Есть 4 основных шага в создании плана:
+//-Создать направление - создает направление для поезда(к примеру Бийск - Барнаул)
+//-Продать билеты - вы получаете рандомное кол-во пассажиров, которые купили билеты на это направление
+//-Сформировать поезд - вы создаете поезд и добавляете ему столько вагонов(вагоны могут быть разные по вместительности), сколько хватит для перевозки всех пассажиров.
+//-Отправить поезд - вы отправляете поезд, после чего можете снова создать направление.
+//В верхней части программы должна выводиться полная информация о текущем рейсе или его отсутствии.
