@@ -1,0 +1,137 @@
+using System;
+
+namespace ConsoleApp2
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Person vendor = new Person();
+            Player player = new Player();
+            Item sword = new Item("Red Sword");
+            Item shield = new Item("Iron Shield");
+            Item armor = new Item("Iron Armor");
+            vendor.AddItem(sword);
+            vendor.AddItem(shield);
+            vendor.AddItem(armor);
+            player.StartShopping(vendor);
+        }
+    }
+
+    class Item
+    {
+        public string Name { get; private set; }
+
+        public Item(string name)
+        {
+            Name = name;
+        }
+    }
+
+    class Person
+    {
+        private List<Item> _inventory = new List<Item>();
+
+        public void ShowInventory()
+        {
+            for (int i = 0; i < _inventory.Count; i++)
+            {
+                Console.WriteLine(i+1 + ") " + _inventory[i].Name + ". ");
+            }
+        }
+
+        public int GetItemsNumber()
+        {
+            return _inventory.Count;
+        }
+
+        public void AddItem(Item item)
+        {
+            _inventory.Add(item);
+        }
+
+        public Item GiveItem(int index)
+        {
+            Item item = _inventory[index - 1];
+            _inventory.RemoveAt(index-1);
+            return item;
+        }
+
+        public int CheckIndex(Person vendor, string input)
+        {
+            int itemIndex;
+            bool isNumber = int.TryParse(input, out itemIndex);
+            if (isNumber == true && (itemIndex > vendor.GetItemsNumber() || itemIndex <= 0))
+            {
+                return 0;
+            }
+            else
+            {
+                return itemIndex;
+            }
+        }
+    }
+
+    class Player : Person
+    {
+        private string _userInput;
+        private string _buy = "buy";
+        private string _shop = "shop";
+        private string _show = "show";
+        private string _exitWord = "exit";
+
+        public void StartShopping(Person vendor)
+        {
+            Console.WriteLine("You can buy:\n");
+            ShowVendorInventory(vendor);
+            
+            while (_userInput != _exitWord)
+            {
+                Console.WriteLine("Commands: buy, shop, show, exit");
+                _userInput = Console.ReadLine();
+
+                if (_userInput == _buy)
+                {
+                    BuyItem(vendor);
+                }
+                else if (_userInput == _show)
+                {
+                    ShowInventory();
+                }
+                else if (_userInput == _shop)
+                {
+                    ShowVendorInventory(vendor);
+                }
+            }
+        }
+
+        private void BuyItem(Person vendor)
+        {
+            Console.WriteLine("Write item shop index:");
+            _userInput = Console.ReadLine();
+            int itemIndex = CheckIndex(vendor, _userInput);
+            if (itemIndex != 0)
+            {
+                Item item = vendor.GiveItem(itemIndex);
+                this.AddItem(item);
+            }
+            else
+            {
+                Console.WriteLine("Error");
+            }
+        }
+
+        private void ShowVendorInventory(Person vendor)
+        {
+            vendor.ShowInventory();
+        }
+    }
+}
+
+
+
+//Существует продавец, он имеет у себя список товаров, и при нужде,
+//может вам его показать, также продавец может продать вам товар.
+//После продажи товар переходит к вам, и вы можете также посмотреть свои вещи.
+//Возможные классы – игрок, продавец, товар.
+//Вы можете сделать так, как вы видите это.
