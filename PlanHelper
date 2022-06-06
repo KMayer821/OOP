@@ -12,24 +12,26 @@ namespace ConsoleApp3
 
     class Train
     {
-        private List<Van> train = new List<Van>();
+        private List<Van> _train = new List<Van>();
         private int _numberOfPassengers;
         public Train(int numberPassengers)
         {
             _numberOfPassengers = numberPassengers;
             while (IsCompleted() == false)
             {
-                train.Add(new Van());
+                _train.Add(new Van());
             }
         }
 
         public bool IsCompleted()
         {
             int currentMaximumOfPassengers= 0; 
-            for (int i = 0; i < train.Count; i++)
+
+            for (int i = 0; i < _train.Count; i++)
             {
-                currentMaximumOfPassengers += train[i].Capacity;
+                currentMaximumOfPassengers += _train[i].Capacity;
             }
+
             if (currentMaximumOfPassengers >= _numberOfPassengers)
             {
                 return true;
@@ -42,16 +44,16 @@ namespace ConsoleApp3
 
         public int GetVansNumber()
         {
-            return train.Count;
+            return _train.Count;
         }
     }
 
     class Van
     {
-        public int Capacity { get; private set; }
         private int _minimumCapacity = 50;
         private int _maximumCapacity = 150;
-        
+        public int Capacity { get; private set; }
+
         public Van()
         {
             Random random = new Random();
@@ -103,19 +105,6 @@ namespace ConsoleApp3
             }
         }
 
-        private void CreateDirection()
-        {
-            _direction.Clear();
-            Console.Write("Start city --  ");
-            _direction.Add(Console.ReadLine());
-            Console.Write("End city --  ");
-            _direction.Add(Console.ReadLine());
-            _isDirectionCreated = true;
-            _isTicketsSold = false;
-            _isTrainFormed = false;
-            _isTrainGone = false;
-        }
-
         public void SellTickets()
         {
             int minimumPassengers = 50;
@@ -162,6 +151,19 @@ namespace ConsoleApp3
                 information = "WELL DONE..";
             }
             Console.WriteLine(information);
+        }
+
+        private void CreateDirection()
+        {
+            _direction.Clear();
+            Console.Write("Start city --  ");
+            _direction.Add(Console.ReadLine());
+            Console.Write("End city --  ");
+            _direction.Add(Console.ReadLine());
+            _isDirectionCreated = true;
+            _isTicketsSold = false;
+            _isTrainFormed = false;
+            _isTrainGone = false;
         }
     }
 }
