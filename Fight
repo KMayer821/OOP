@@ -1,0 +1,248 @@
+using System;
+
+namespace ConsoleApp4
+{ 
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Fight fight = new Fight();
+        }
+    }
+
+    abstract class Fighter
+    {
+        protected int AvoidChance = 0;
+        protected int MaxChance = 100;
+        public string Name { get; protected set; }
+        public int Damage { get; protected set; }
+        public int Health { get; protected set; }
+        
+        public virtual void GetDamage(int damage)
+        {
+            Health -= damage;
+        }
+
+        public bool IsAlife()
+        {
+            if (Health < 0)
+            {
+                Health = 0;
+                return false;
+            }
+            else if(Health == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        protected bool getBoolByChance(int chance)
+        {
+            Random random = new Random();
+            int currentLuckValue = random.Next(MaxChance);
+            if (currentLuckValue < chance)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    class Warrior : Fighter
+    {
+        private int _battleRoarChance = 50;
+        
+        public Warrior()
+        {
+            this.Name = "WAR";
+            this.Health = 100;
+            this.Damage = 15;
+        }
+
+        public override void GetDamage(int damage)
+        {
+            bool isRoarActivate = getBoolByChance(_battleRoarChance);
+            base.GetDamage(damage);
+
+            if (isRoarActivate == true)
+            {
+                BattleRoar();
+            }
+        }
+
+        private void BattleRoar()
+        {
+            this.Damage *= 2;
+        }
+    }
+
+    class Barbarian : Fighter
+    {
+        public Barbarian()
+        {
+            this.Name = "BAR";
+            this.Health = 70;
+            this.Damage = 23;
+        }
+    }
+    class Paladin : Fighter
+    {
+        private int _paladinHeal = 4;
+
+        public Paladin()
+        {
+            this.Name = "PAL";
+            this.Health = 120;
+            this.Damage = 14;
+        }
+
+        public override void GetDamage(int damage)
+        {
+            Health += _paladinHeal;
+            Health -= damage;
+        }
+    }
+    class Rogue : Fighter
+    {
+        public Rogue()
+        {
+            this.Name = "ROG";
+            this.Health = 40;
+            this.Damage = 30;
+            this.AvoidChance = 25;
+        }
+
+        public override void GetDamage(int damage)
+        {
+            bool isAvoided = getBoolByChance(AvoidChance);
+
+            if (isAvoided == false)
+            {
+                Health -= damage;
+            }
+        }
+
+        
+    }
+
+    class Cleric : Fighter
+    {
+        private bool _isLastChanceActivate = false;
+
+        public Cleric()
+        {
+            this.Name = "CLE";
+            this.Health = 150;
+            this.Damage = 10;
+        }
+
+        public override void GetDamage(int damage)
+        {
+            Health -= damage;
+            LastChance();
+        }
+
+        public void LastChance()
+        {
+            if (Health <= 0 && _isLastChanceActivate == false)
+            {
+                Health += 50;
+                _isLastChanceActivate = true;
+            }
+        }
+    }
+
+    class Fight
+    {
+        private string _userInput;
+        private string _clericChar = "C";
+        private string _rogueChar = "R";
+        private string _paladinChar = "P";
+        private string _barbarianChar = "B";
+        private string _warriorChar = "W";
+        private Fighter _firstFighter = null;
+        private Fighter _secondFighter = null;
+
+        public Fight()
+        {
+            int fightMuilisecTimer = 300;
+            Console.WriteLine("Choose first character: ");
+            _firstFighter = ChooseCharacter();
+            Console.WriteLine("Choose second character: ");
+            _secondFighter = ChooseCharacter();
+            Console.WriteLine(_firstFighter.Name + "      " + _secondFighter.Name);
+
+            while(_firstFighter.IsAlife() && _secondFighter.IsAlife())
+            {
+                Console.WriteLine(_firstFighter.Health + " ----- " + _secondFighter.Health);
+                GetRound();
+                Thread.Sleep(fightMuilisecTimer);
+            }
+            GetFightResult();
+        }
+
+        public void GetRound()
+        {
+            _secondFighter.GetDamage(_firstFighter.Damage);
+            _firstFighter.GetDamage(_secondFighter.Damage);
+        }
+
+
+        public Fighter ChooseCharacter()
+        {
+            Fighter fighter = null;
+            Console.WriteLine("C - cleric\nR - rogue\nP - paladin\nB - barbarian\nW - warrior");
+            _userInput = Console.ReadLine();
+
+            while (fighter == null)
+            {
+                if (_userInput != "C" && _userInput != "R" && _userInput != "P" && _userInput != "B" && _userInput != "W")
+                {
+                    Console.WriteLine("Wrong input!");
+                    _userInput = Console.ReadLine();
+                }
+                else if (_userInput == _clericChar)
+                {
+                    fighter = new Cleric();
+                }
+                else if (_userInput == _rogueChar)
+                {
+                    fighter = new Rogue();
+                }
+                else if (_userInput == _paladinChar)
+                {
+                    fighter = new Paladin();
+                }
+                else if (_userInput == _barbarianChar)
+                {
+                    fighter = new Barbarian();
+                }
+                else if (_userInput == _warriorChar)
+                {
+                    fighter = new Warrior();
+                }
+            }
+            return fighter;
+        }
+
+        public void GetFightResult()
+        {
+            if (_secondFighter.IsAlife())
+            {
+                Console.WriteLine(_secondFighter.Name + " won!"); 
+            }
+            else
+            {
+                Console.WriteLine(_firstFighter.Name + " won!");
+            }
+            Console.WriteLine(_firstFighter.Health + " ----- " + _secondFighter.Health);
+        }
+    }
+}
