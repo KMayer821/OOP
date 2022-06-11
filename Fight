@@ -18,7 +18,7 @@ namespace ConsoleApp4
         public int Damage { get; protected set; }
         public int Health { get; protected set; }
         
-        public virtual void GetDamage(int damage)
+        public virtual void TakeDamage(int damage)
         {
             Health -= damage;
         }
@@ -40,7 +40,7 @@ namespace ConsoleApp4
             }
         }
 
-        protected bool isChanceWorked(int chance)
+        protected bool IsChanceWorked(int chance)
         {
             Random random = new Random();
             int currentLuckValue = random.Next(MaxChance);
@@ -66,10 +66,10 @@ namespace ConsoleApp4
             Damage = 15;
         }
 
-        public override void GetDamage(int damage)
+        public override void TakeDamage(int damage)
         {
-            bool isRoarActivate = isChanceWorked(_battleRoarChance);
-            base.GetDamage(damage);
+            bool isRoarActivate = IsChanceWorked(_battleRoarChance);
+            base.TakeDamage(damage);
 
             if (isRoarActivate == true)
             {
@@ -104,7 +104,7 @@ namespace ConsoleApp4
             Damage = 14;
         }
 
-        public override void GetDamage(int damage)
+        public override void TakeDamage(int damage)
         {
             Health += _paladinHeal;
             Health -= damage;
@@ -120,9 +120,9 @@ namespace ConsoleApp4
             AvoidChance = 25;
         }
 
-        public override void GetDamage(int damage)
+        public override void TakeDamage(int damage)
         {
-            bool isAvoided = isChanceWorked(AvoidChance);
+            bool isAvoided = IsChanceWorked(AvoidChance);
 
             if (isAvoided == false)
             {
@@ -144,7 +144,7 @@ namespace ConsoleApp4
             Damage = 10;
         }
 
-        public override void GetDamage(int damage)
+        public override void TakeDamage(int damage)
         {
             Health -= damage;
             LastChance();
@@ -185,16 +185,16 @@ namespace ConsoleApp4
             while(_firstFighter.IsAlife() && _secondFighter.IsAlife())
             {
                 Console.WriteLine(_firstFighter.Health + " ----- " + _secondFighter.Health);
-                cunductRound();
+                CunductRound();
                 Thread.Sleep(fightMuilisecTimer);
             }
             ShowFightResult();
         }
 
-        public void cunductRound()
+        public void CunductRound()
         {
-            _secondFighter.GetDamage(_firstFighter.Damage);
-            _firstFighter.GetDamage(_secondFighter.Damage);
+            _secondFighter.TakeDamage(_firstFighter.Damage);
+            _firstFighter.TakeDamage(_secondFighter.Damage);
         }
 
 
