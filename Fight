@@ -40,7 +40,7 @@ namespace ConsoleApp4
             }
         }
 
-        protected bool getBoolByChance(int chance)
+        protected bool isChanceWorked(int chance)
         {
             Random random = new Random();
             int currentLuckValue = random.Next(MaxChance);
@@ -61,14 +61,14 @@ namespace ConsoleApp4
         
         public Warrior()
         {
-            this.Name = "WAR";
-            this.Health = 100;
-            this.Damage = 15;
+            Name = "WAR";
+            Health = 100;
+            Damage = 15;
         }
 
         public override void GetDamage(int damage)
         {
-            bool isRoarActivate = getBoolByChance(_battleRoarChance);
+            bool isRoarActivate = isChanceWorked(_battleRoarChance);
             base.GetDamage(damage);
 
             if (isRoarActivate == true)
@@ -79,7 +79,8 @@ namespace ConsoleApp4
 
         private void BattleRoar()
         {
-            this.Damage *= 2;
+            int damageMultiplier = 2;
+            Damage *= damageMultiplier;
         }
     }
 
@@ -87,9 +88,9 @@ namespace ConsoleApp4
     {
         public Barbarian()
         {
-            this.Name = "BAR";
-            this.Health = 70;
-            this.Damage = 23;
+            Name = "BAR";
+            Health = 70;
+            Damage = 23;
         }
     }
     class Paladin : Fighter
@@ -98,9 +99,9 @@ namespace ConsoleApp4
 
         public Paladin()
         {
-            this.Name = "PAL";
-            this.Health = 120;
-            this.Damage = 14;
+            Name = "PAL";
+            Health = 120;
+            Damage = 14;
         }
 
         public override void GetDamage(int damage)
@@ -113,15 +114,15 @@ namespace ConsoleApp4
     {
         public Rogue()
         {
-            this.Name = "ROG";
-            this.Health = 40;
-            this.Damage = 30;
-            this.AvoidChance = 25;
+            Name = "ROG";
+            Health = 40;
+            Damage = 30;
+            AvoidChance = 25;
         }
 
         public override void GetDamage(int damage)
         {
-            bool isAvoided = getBoolByChance(AvoidChance);
+            bool isAvoided = isChanceWorked(AvoidChance);
 
             if (isAvoided == false)
             {
@@ -138,9 +139,9 @@ namespace ConsoleApp4
 
         public Cleric()
         {
-            this.Name = "CLE";
-            this.Health = 150;
-            this.Damage = 10;
+            Name = "CLE";
+            Health = 150;
+            Damage = 10;
         }
 
         public override void GetDamage(int damage)
@@ -151,9 +152,11 @@ namespace ConsoleApp4
 
         public void LastChance()
         {
+            int extraHealth = 50;
+
             if (Health <= 0 && _isLastChanceActivate == false)
             {
-                Health += 50;
+                Health += extraHealth;
                 _isLastChanceActivate = true;
             }
         }
@@ -182,13 +185,13 @@ namespace ConsoleApp4
             while(_firstFighter.IsAlife() && _secondFighter.IsAlife())
             {
                 Console.WriteLine(_firstFighter.Health + " ----- " + _secondFighter.Health);
-                GetRound();
+                cunductRound();
                 Thread.Sleep(fightMuilisecTimer);
             }
-            GetFightResult();
+            ShowFightResult();
         }
 
-        public void GetRound()
+        public void cunductRound()
         {
             _secondFighter.GetDamage(_firstFighter.Damage);
             _firstFighter.GetDamage(_secondFighter.Damage);
@@ -232,7 +235,7 @@ namespace ConsoleApp4
             return fighter;
         }
 
-        public void GetFightResult()
+        public void ShowFightResult()
         {
             if (_secondFighter.IsAlife())
             {
