@@ -95,7 +95,7 @@ namespace ConsoleApp4
     }
     class Paladin : Fighter
     {
-        private int _paladinHeal = 4;
+        private int _heal = 4;
 
         public Paladin()
         {
@@ -106,7 +106,7 @@ namespace ConsoleApp4
 
         public override void TakeDamage(int damage)
         {
-            Health += _paladinHeal;
+            Health += _heal;
             Health -= damage;
         }
     }
@@ -165,11 +165,6 @@ namespace ConsoleApp4
     class Fight
     {
         private string _userInput;
-        private string _clericChar = "C";
-        private string _rogueChar = "R";
-        private string _paladinChar = "P";
-        private string _barbarianChar = "B";
-        private string _warriorChar = "W";
         private Fighter _firstFighter = null;
         private Fighter _secondFighter = null;
 
@@ -200,34 +195,40 @@ namespace ConsoleApp4
 
         public Fighter ChooseCharacter()
         {
+            List<string> caractersCharId = new List<string>();
+            caractersCharId.Add("C");
+            caractersCharId.Add("R");
+            caractersCharId.Add("P");
+            caractersCharId.Add("B");
+            caractersCharId.Add("W");
             Fighter fighter = null;
             Console.WriteLine("C - cleric\nR - rogue\nP - paladin\nB - barbarian\nW - warrior");
             _userInput = Console.ReadLine();
 
             while (fighter == null)
             {
-                if (_userInput != "C" && _userInput != "R" && _userInput != "P" && _userInput != "B" && _userInput != "W")
+                if (caractersCharId.All(s => _userInput != s))
                 {
                     Console.WriteLine("Wrong input!");
                     _userInput = Console.ReadLine();
                 }
-                else if (_userInput == _clericChar)
+                else if (_userInput == caractersCharId[0])
                 {
                     fighter = new Cleric();
                 }
-                else if (_userInput == _rogueChar)
+                else if (_userInput == caractersCharId[1])
                 {
                     fighter = new Rogue();
                 }
-                else if (_userInput == _paladinChar)
+                else if (_userInput == caractersCharId[2])
                 {
                     fighter = new Paladin();
                 }
-                else if (_userInput == _barbarianChar)
+                else if (_userInput == caractersCharId[3])
                 {
                     fighter = new Barbarian();
                 }
-                else if (_userInput == _warriorChar)
+                else if (_userInput == caractersCharId[4])
                 {
                     fighter = new Warrior();
                 }
