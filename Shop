@@ -1,0 +1,122 @@
+using System;
+
+namespace ConsoleApp6
+{
+    internal class Programm
+    {
+        static void Main(string[] args)
+        {
+            Queue<Client> shopQueue = new Queue<Client> ();
+            Product milk = new Product("milk", 50);
+            Product tea = new Product("tea", 150);
+            Product coffee = new Product("coffee", 200);
+            Product water = new Product("water", 10);
+            Product juice = new Product("juice", 65);
+            Client boy = new Client(100);
+            Client girl = new Client(100);
+            Client man = new Client(500);
+            Client woman = new Client(450);
+            boy.TakeProduct(milk);
+            boy.TakeProduct(tea);
+            girl.TakeProduct(juice);
+            girl.TakeProduct(water);
+            man.TakeProduct(coffee);
+            man.TakeProduct(water);
+            woman.TakeProduct(coffee);
+            woman.TakeProduct(tea);
+            woman.TakeProduct(juice);
+            woman.TakeProduct(milk);
+            woman.TakeProduct(water);
+            shopQueue.Enqueue (boy);
+            shopQueue.Enqueue(man);
+            shopQueue.Enqueue(woman);
+            shopQueue.Enqueue(girl);
+            foreach(Client client in shopQueue)
+            {
+                client.StartShopping();
+            }
+        }
+    }
+
+    class Client
+    {
+        private int _money;
+        private List<Product> _products = new List<Product>();
+        private int _productsPrice;
+
+        public Client(int money)
+        {
+            _money = money;
+        }
+
+        public void StartShopping()
+        {
+            CalculateProductsPrice();
+            Console.WriteLine("You have " + _money + " rubles");
+            Console.WriteLine("You want to buy: ");
+            foreach (Product product in _products)
+            {
+                Console.WriteLine (product.Name);
+            }
+            Console.WriteLine("Total coast is: " + _productsPrice);
+            BuyProducts();
+        }
+
+        public void TakeProduct(Product product)
+        {
+            _products.Add(product);
+        }
+
+        public void BuyProducts()
+        {
+            while(IsEnoughMoney() != true)
+            {
+                Console.WriteLine("Not enough money");
+                DropRandomProduct();
+                CalculateProductsPrice();
+            }
+            Console.WriteLine("It's ok, NEXT!\n\n\n");            
+        }
+
+        public void CalculateProductsPrice()
+        {
+            _productsPrice = 0;
+            foreach (Product product in _products)
+            {
+                _productsPrice += product.Price;
+            }
+        }
+
+        private bool IsEnoughMoney()
+        {
+            if (_productsPrice > _money)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        private void DropRandomProduct()
+        {
+            Random random = new Random();
+            int dropProductIndex = random.Next(0, _products.Count);
+            Console.WriteLine("You drop a " + _products[dropProductIndex].Name);
+            _products.RemoveAt(dropProductIndex);
+        }
+    }
+
+    class Product
+    {
+        public string Name { get; private set; }   
+        public int Price { get; private set; }   
+
+        public Product(string name, int price)
+        {
+            Name = name;
+            Price = price;
+        }
+    }
+}
