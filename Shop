@@ -46,13 +46,10 @@ namespace ConsoleApp6
             while (_shopQueue.Count > 0)
             {
                 _currentClient = GetNextClient();
-                _currentClient.CalculateProductsPrice();
+                _productsPrice = _currentClient.CalculateProductsPrice();
                 Console.WriteLine("You have " + _currentClient.Money + " rubles");
                 Console.WriteLine("You want to buy: ");
-                foreach (Product product in _currentClient.GetProducts())
-                {
-                    Console.WriteLine(product.Name);
-                }
+                _currentClient.ShowProducts();
                 Console.WriteLine("Total coast is: " + _productsPrice);
                 SellProducts();
             }
@@ -68,18 +65,13 @@ namespace ConsoleApp6
             return _shopQueue.Dequeue();
         }
 
-        private int GetQueueSize()
-        {
-            return _shopQueue.Count;
-        }
-
         private void SellProducts()
         {
             while (IsEnoughMoney() != true)
             {
                 Console.WriteLine("Not enough money");
                 _currentClient.DropRandomProduct();
-                _currentClient.CalculateProductsPrice();
+                _productsPrice = _currentClient.CalculateProductsPrice();
             }
             Console.WriteLine("It's ok, NEXT!\n\n\n");
         }
@@ -99,18 +91,20 @@ namespace ConsoleApp6
 
     class Client
     {
-        public int Money { get; private set; }
         private List<Product> _products = new List<Product>();
-        private int _productsPrice;
+        public int Money { get; private set; }
 
         public Client(int money = 0)
         {
             Money = money;
         }
 
-        public List<Product> GetProducts()
+        public void ShowProducts()
         {
-            return _products;
+            foreach (Product product in _products)
+            {
+                Console.WriteLine(product.Name);
+            }
         }
 
         public void TakeProduct(Product product)
@@ -126,13 +120,14 @@ namespace ConsoleApp6
             _products.RemoveAt(dropProductIndex);
         }
 
-        public void CalculateProductsPrice()
+        public int CalculateProductsPrice()
         {
-            _productsPrice = 0;
-            foreach (Product product in GetProducts())
+            int productsPrice = 0;
+            foreach (Product product in _products)
             {
-                _productsPrice += product.Price;
+                productsPrice += product.Price;
             }
+            return productsPrice;
         }
     }
 
