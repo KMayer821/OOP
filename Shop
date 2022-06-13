@@ -6,7 +6,7 @@ namespace ConsoleApp6
     {
         static void Main(string[] args)
         {
-            Queue<Client> shopQueue = new Queue<Client> ();
+            Shop shop = new Shop();
             Product milk = new Product("milk", 50);
             Product tea = new Product("tea", 150);
             Product coffee = new Product("coffee", 200);
@@ -27,14 +27,25 @@ namespace ConsoleApp6
             woman.TakeProduct(juice);
             woman.TakeProduct(milk);
             woman.TakeProduct(water);
-            shopQueue.Enqueue (boy);
-            shopQueue.Enqueue(man);
-            shopQueue.Enqueue(woman);
-            shopQueue.Enqueue(girl);
-            foreach(Client client in shopQueue)
+            shop.AddClient(boy);
+            shop.AddClient(man);
+            shop.AddClient(woman);
+            shop.AddClient(girl);
+
+            foreach(Client client in shop.ShopQueue)
             {
                 client.StartShopping();
             }
+        }
+    }
+
+    class Shop
+    {
+        public Queue<Client> ShopQueue { get; private set; } = new  Queue<Client> ();
+
+        public void AddClient(Client client)
+        {
+            ShopQueue.Enqueue(client);
         }
     }
 
