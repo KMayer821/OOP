@@ -1,0 +1,135 @@
+using System;
+
+namespace ConsoleApp1
+{
+    internal class Programm
+    {
+        static void Main(string[] args)
+        {
+            Platoon firstCountryPlatoon = new Platoon();
+            Platoon secondCountryPlatoon = new Platoon();
+            firstCountryPlatoon.AddSoldier(20, 14);
+            firstCountryPlatoon.AddSoldier(15, 10);
+            firstCountryPlatoon.AddSoldier(100, 12);
+            secondCountryPlatoon.AddSoldier(30, 14);
+            secondCountryPlatoon.AddSoldier(50, 23);
+            secondCountryPlatoon.AddSoldier(17, 22);
+            Fight fight = new Fight();
+            fight.StartFight(firstCountryPlatoon, secondCountryPlatoon);
+        }
+    }
+
+    class Platoon
+    {
+        private List<Soldier> _soldiers = new List<Soldier> ();
+        
+        public void AddSoldier(int health, int damage)
+        {
+            Soldier soldier = new Soldier(health, damage);
+            _soldiers.Add(soldier);
+        }
+
+        public Soldier GetNextAliveSoldier()
+        {
+            return _soldiers.First();
+        }
+
+        public int GetSize()
+        {
+            return _soldiers.Count;
+        }
+
+        public void DropSoldier(Soldier solder)
+        {
+            _soldiers.Remove(solder);
+        }
+    }
+
+    class Soldier
+    {
+        public int Damage { get; private set; }
+        private int Health;
+
+        public Soldier(int health, int damage)
+        {
+            Health = health;
+            Damage = damage;
+        }
+
+        public void TakeDamage(int damage)
+        {
+            Health -= damage;
+        }
+
+        public bool IsAlive()
+        {
+            if (Health <= 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public int GetCurrentHp()
+        {
+            if (Health < 0)
+            {
+                Health = 0;
+                return Health;
+            }
+            return Health;
+        }
+    }
+
+    class Fight
+    { 
+        public void StartFight(Platoon firstPlatoon, Platoon secondPlatoon)
+        {
+           while (firstPlatoon.GetSize() != 0 && secondPlatoon.GetSize() != 0)
+            {
+                Soldier firstPlatoonSoldier = firstPlatoon.GetNextAliveSoldier();
+                Soldier secondPlatoonSoldier = secondPlatoon.GetNextAliveSoldier();
+                Console.WriteLine(firstPlatoon.GetSize() + " vs " + secondPlatoon.GetSize());
+                Console.WriteLine("HP  HP");
+                FightBetweenTwoSoldiers(firstPlatoonSoldier, secondPlatoonSoldier);
+                
+                if (firstPlatoonSoldier.IsAlive() == false)
+                {
+                    firstPlatoon.DropSoldier(firstPlatoonSoldier);
+                }
+                if (secondPlatoonSoldier.IsAlive() == false)
+                {
+                    secondPlatoon.DropSoldier(secondPlatoonSoldier);
+                }
+            }
+        }
+
+        private void FightBetweenTwoSoldiers(Soldier firstSoldier, Soldier secondSoldier)
+        {
+            while (firstSoldier.IsAlive() && secondSoldier.IsAlive())
+                { 
+                    firstSoldier.TakeDamage(secondSoldier.Damage);
+                    secondSoldier.TakeDamage(firstSoldier.Damage);
+                    FightRecap(firstSoldier, secondSoldier);
+                }
+            Console.WriteLine("_______________________________");
+        }
+
+        private void FightRecap(Soldier firstSoldier, Soldier secondSoldier)
+        {
+            Console.WriteLine(firstSoldier.GetCurrentHp() + "----" + secondSoldier.GetCurrentHp());
+        }
+    }
+}
+/*
+Есть 2 взвода. 1 взвод страны один, 2 взвод страны два.
+Каждый взвод внутри имеет солдат.
+Нужно написать программу, которая будет моделировать бой этих взводов.
+Каждый боец - это уникальная единица, он может иметь уникальные способности или же уникальные 
+характеристики, такие как повышенная сила.
+Побеждает та страна, во взводе которой остались выжившие бойцы.
+Не важно, какой будет бой, рукопашный, стрелковый.
+*/
