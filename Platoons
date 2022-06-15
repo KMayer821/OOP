@@ -47,8 +47,8 @@ namespace ConsoleApp1
 
     class Soldier
     {
-        public int Damage { get; private set; }
         private int Health;
+        public int Damage { get; private set; }
 
         public Soldier(int health, int damage)
         {
@@ -113,12 +113,12 @@ namespace ConsoleApp1
                 { 
                     firstSoldier.TakeDamage(secondSoldier.Damage);
                     secondSoldier.TakeDamage(firstSoldier.Damage);
-                    FightRecap(firstSoldier, secondSoldier);
+                    GetFightInformation(firstSoldier, secondSoldier);
                 }
             Console.WriteLine("_______________________________");
         }
 
-        private void FightRecap(Soldier firstSoldier, Soldier secondSoldier)
+        private void GetFightInformation(Soldier firstSoldier, Soldier secondSoldier)
         {
             Console.WriteLine(firstSoldier.GetCurrentHp() + "----" + secondSoldier.GetCurrentHp());
         }
