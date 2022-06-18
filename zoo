@@ -22,11 +22,13 @@ namespace ConsoleApp1
                 catAviary.AddAnimal(cat);
                 wolfAviary.AddAnimal(wolf);
                 pandaAviary.AddAnimal(panda);
+                hedgehogAviary.AddAnimal(hedgehog);
             }
             Zoo zoo = new Zoo();
             zoo.AddAviary(catAviary);
             zoo.AddAviary(wolfAviary);
             zoo.AddAviary(pandaAviary);
+            zoo.AddAviary(hedgehogAviary);
             zoo.GetMenu();
         }
     }
