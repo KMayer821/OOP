@@ -51,14 +51,22 @@ namespace ConsoleApp7
                 Thread.Sleep(pause);
                 ShowAllFishes();
                 SpendYear();
+                RemoveDiedFishes();
                 Console.WriteLine("=======================");
             }
             Console.WriteLine("It's gone");
         }
 
-        private void RemoveFish(Fish fish)
+        private void RemoveDiedFishes()
         {
-            _fishes.Remove(fish);
+            for (int i = 0; i < _fishes.Count; i++)
+            {
+                if (_fishes[i].IsAlive() == false)
+                {
+                    _fishes.Remove(_fishes[i]);
+                    i--;
+                }
+            }
         }
 
         private void SpendYear()
@@ -66,12 +74,6 @@ namespace ConsoleApp7
             for (int i = 0; i < _fishes.Count; i++)
             {
                 _fishes[i].SpendYear();
-
-                if (_fishes[i].IsAlive() == false)
-                {
-                    RemoveFish(_fishes[i]);
-                    i--;
-                }
             }
         }
 
