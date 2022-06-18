@@ -1,0 +1,153 @@
+using System;
+
+namespace ConsoleApp7
+{
+    internal class Programm
+    {
+        static void Main(string[] args)
+        {
+            Fish clownFish = new Fish(16);
+            Fish redFish = new Fish(10);
+            Fish blueFish = new Fish(3);
+            Aquarium aquarium = new Aquarium();
+            aquarium.AddFish(clownFish);
+            aquarium.AddFish(redFish);
+            aquarium.AddFish(blueFish);
+            TimeImitator timeImitator = new TimeImitator(aquarium);
+            timeImitator.StartTime();
+        }
+    }
+
+    class TimeImitator
+    {
+        private Aquarium _aquarium = new Aquarium();
+
+        public TimeImitator(Aquarium aquarium)
+        {
+            _aquarium = aquarium;
+        }
+
+        public void SpendYear()
+        {
+            for (int i = 0; i < _aquarium.GetFishesNumber(); i++)
+            {
+                _aquarium.GetFishByIndex(i).SpendOneYear();
+
+                if (_aquarium.GetFishByIndex(i).IsAlive() == false)
+                {
+                    _aquarium.RemoveFish(_aquarium.GetFishByIndex(i));
+                }
+            }
+        }
+
+        public void StartTime()
+        {
+            int pause = 100;
+
+            while (_aquarium.GetFishesNumber() != 0)
+            {
+                Thread.Sleep(pause);
+                _aquarium.ShowAllFishes();
+                SpendYear();
+                Console.WriteLine("=======================");
+            }
+            Console.WriteLine("It's gone");
+        }
+    }
+
+    class Aquarium
+    {
+        private List<Fish> _fishes = new List<Fish>();
+        private int _maximumNumberOfFishes = 5;
+
+        public void AddFish(Fish fish)
+        {
+            if (IsFull() == false)
+            {
+                _fishes.Add(fish);
+            }
+            else
+            {
+                Console.WriteLine("Aquarium contains maximum of " + _maximumNumberOfFishes + " fishes");
+            }
+        }
+
+        public void RemoveFish(Fish fish)
+        {
+            _fishes.Remove(fish);
+        }
+
+        public Fish GetFishByIndex(int index)
+        {
+            return _fishes[index];
+        }
+
+        public void ShowAllFishes()
+        {
+            for (int i = 0; i < _fishes.Count; i++)
+            {
+                Console.WriteLine(i+1 + ") " + " - " + _fishes[i].Age);
+            }
+        }
+
+        public int GetFishesNumber()
+        {
+            return _fishes.Count;
+        }
+
+        private bool IsFull()
+        {
+            if (_fishes.Count == _maximumNumberOfFishes)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    class Fish
+    {
+        private int _timeToLive;
+        private int _maximumTimeToLive = 20;
+
+        public int Age { get; private set; }
+
+        public Fish(int age)
+        {
+            Age = age;
+            _timeToLive = _maximumTimeToLive - age;
+        }
+
+        public void SpendOneYear()
+        {
+            _timeToLive -= 1;
+            Age += 1;
+        }
+
+        public bool IsAlive()
+        {
+            if (_timeToLive > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
+//Есть аквариум, в котором плавают рыбы. 
+//    В этом аквариуме может быть максимум 
+//определенное кол-во рыб. Рыб можно добавить 
+//в аквариум или рыб можно достать из аквариума.
+//    (программу делать в цикле для того, чтобы рыбы могли “жить”)
+//Все рыбы отображаются списком,
+//у рыб также есть возраст. 
+//За 1 итерацию рыбы стареют
+//на определенное кол-во жизней
+//и могут умереть. Рыб также вывести в консоль,
+//чтобы можно было мониторить показатели.
