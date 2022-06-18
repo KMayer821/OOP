@@ -6,52 +6,17 @@ namespace ConsoleApp7
     {
         static void Main(string[] args)
         {
+            List<Fish> fishes = new List<Fish>();
             Fish clownFish = new Fish(16);
             Fish redFish = new Fish(10);
             Fish blueFish = new Fish(3);
-            Aquarium aquarium = new Aquarium();
-            aquarium.AddFish(clownFish);
-            aquarium.AddFish(redFish);
-            aquarium.AddFish(blueFish);
-            TimeImitator timeImitator = new TimeImitator(aquarium);
-            timeImitator.StartTime();
-        }
-    }
-
-    class TimeImitator
-    {
-        private Aquarium _aquarium = new Aquarium();
-
-        public TimeImitator(Aquarium aquarium)
-        {
-            _aquarium = aquarium;
-        }
-
-        public void SpendYear()
-        {
-            for (int i = 0; i < _aquarium.GetFishesNumber(); i++)
-            {
-                _aquarium.GetFishByIndex(i).SpendOneYear();
-
-                if (_aquarium.GetFishByIndex(i).IsAlive() == false)
-                {
-                    _aquarium.RemoveFish(_aquarium.GetFishByIndex(i));
-                }
-            }
-        }
-
-        public void StartTime()
-        {
-            int pause = 100;
-
-            while (_aquarium.GetFishesNumber() != 0)
-            {
-                Thread.Sleep(pause);
-                _aquarium.ShowAllFishes();
-                SpendYear();
-                Console.WriteLine("=======================");
-            }
-            Console.WriteLine("It's gone");
+            Fish greenFish = new Fish(3);
+            fishes.Add(clownFish);
+            fishes.Add(blueFish);
+            fishes.Add(greenFish);
+            fishes.Add(redFish);
+            Aquarium aquarium = new Aquarium(fishes);
+            aquarium.StartTime();
         }
     }
 
@@ -59,6 +24,11 @@ namespace ConsoleApp7
     {
         private List<Fish> _fishes = new List<Fish>();
         private int _maximumNumberOfFishes = 5;
+
+        public Aquarium(List<Fish> fishes)
+        {
+            _fishes = fishes;
+        }
 
         public void AddFish(Fish fish)
         {
@@ -95,16 +65,37 @@ namespace ConsoleApp7
             return _fishes.Count;
         }
 
+        public void SpendYear()
+        {
+            for (int i = 0; i < _fishes.Count; i++)
+            {
+                _fishes[i].SpendYear();
+
+                if (_fishes[i].IsAlive() == false)
+                {
+                    _fishes.RemoveAt(i);
+                    i--;
+                }
+            }
+        }
+
+        public void StartTime()
+        {
+            int pause = 100;
+
+            while (_fishes.Count != 0)
+            {
+                Thread.Sleep(pause);
+                ShowAllFishes();
+                SpendYear();
+                Console.WriteLine("=======================");
+            }
+            Console.WriteLine("It's gone");
+        }
+
         private bool IsFull()
         {
-            if (_fishes.Count == _maximumNumberOfFishes)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+                return _fishes.Count == _maximumNumberOfFishes;
         }
     }
 
@@ -121,7 +112,7 @@ namespace ConsoleApp7
             _timeToLive = _maximumTimeToLive - age;
         }
 
-        public void SpendOneYear()
+        public void SpendYear()
         {
             _timeToLive -= 1;
             Age += 1;
