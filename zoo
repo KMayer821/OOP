@@ -31,7 +31,7 @@ namespace ConsoleApp1
             zoo.AddAviary(wolfAviary);
             zoo.AddAviary(pandaAviary);
             zoo.AddAviary(hedgehogAviary);
-            zoo.GetMenu();
+            zoo.ShowMenu();
         }
     }
 
@@ -45,7 +45,7 @@ namespace ConsoleApp1
             _aviaries.Add(aviary);
         }
 
-        public void GetMenu()
+        public void ShowMenu()
         {
             Console.WriteLine("Choose aviary");
             ShowAllAviaries();
