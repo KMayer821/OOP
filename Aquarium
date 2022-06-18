@@ -56,6 +56,11 @@ namespace ConsoleApp7
             Console.WriteLine("It's gone");
         }
 
+        private void RemoveFish(Fish fish)
+        {
+            _fishes.Remove(fish);
+        }
+
         private void SpendYear()
         {
             for (int i = 0; i < _fishes.Count; i++)
@@ -64,7 +69,7 @@ namespace ConsoleApp7
 
                 if (_fishes[i].IsAlive() == false)
                 {
-                    _fishes.RemoveAt(i);
+                    RemoveFish(_fishes[i]);
                     i--;
                 }
             }
