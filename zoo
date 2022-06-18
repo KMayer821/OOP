@@ -1,0 +1,153 @@
+using System;
+
+namespace ConsoleApp1
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Random random = new Random();
+            int maximumAnimalsInAviary = 15;
+            int minimumAnimalsInAviary = 1;
+            Animal panda = new Animal("Panda", "M", "Oooooo");
+            Animal wolf = new Animal("Wolf", "G", "Awuuu");
+            Animal cat = new Animal("Cat", "M", "Mew");
+            Animal hedgehog = new Animal("Hedgehog", "G", "Uwu");
+            Aviary catAviary = new Aviary();
+            Aviary wolfAviary = new Aviary();
+            Aviary pandaAviary = new Aviary();
+            Aviary hedgehogAviary = new Aviary();
+            for (int i = 0; i < random.Next(minimumAnimalsInAviary, maximumAnimalsInAviary); i++)
+            {
+                catAviary.AddAnimal(cat);
+                wolfAviary.AddAnimal(wolf);
+                pandaAviary.AddAnimal(panda);
+            }
+            Zoo zoo = new Zoo();
+            zoo.AddAviary(catAviary);
+            zoo.AddAviary(wolfAviary);
+            zoo.AddAviary(pandaAviary);
+            zoo.GetMenu();
+        }
+    }
+
+    class Zoo
+    {
+        private int _userInput;
+        private List<Aviary> _aviaries = new List<Aviary>();
+
+        public void AddAviary(Aviary aviary)
+        {
+            _aviaries.Add(aviary);
+        }
+
+        public void GetMenu()
+        {
+            Console.WriteLine("Choose aviary");
+            ShowAllAviaries();
+            Aviary aviary = ChooseAviary();
+            aviary.ShowInformationAboutAviary();
+        }
+
+        private Aviary ChooseAviary()
+        {
+            while (int.TryParse(Console.ReadLine(), out _userInput) == false || _userInput <= 0 || _userInput > _aviaries.Count)
+            {
+                Console.WriteLine("Wrong input");
+            }
+            return _aviaries[_userInput-1];
+        }
+
+        private void ShowAllAviaries()
+        {
+            for (int i = 0; i < _aviaries.Count; i++)
+            {
+                Console.WriteLine("Write " + (i + 1) + " for choose " + (i + 1));
+            }
+        }
+    }
+
+    class Aviary
+    {
+        private List<Animal> _animnals = new List<Animal>();
+        
+        public void ShowInformationAboutAviary()
+        {
+            Console.Write("It's \"");
+            ShowTypeOfAnimals();
+            Console.WriteLine("\" aviary");
+            Console.WriteLine("It consists of " + _animnals.Count + " animals");
+            Console.Write("Gender: ");
+            ShowAnimalsGener();
+            Console.Write("It goes like: ");
+            ShowAnimalsSound();
+        }
+
+        public void AddAnimal(Animal animal)
+        {
+            _animnals.Add(animal);
+        }
+
+        private void ShowTypeOfAnimals()
+        {
+            Console.Write(_animnals[0].Species);
+        }
+
+        private void ShowAnimalsSound()
+        {
+            Console.WriteLine(_animnals[0].Sound);
+        }
+
+        private void ShowAnimalsGener()
+        {
+            bool isThereFamale = false;
+            bool isThereMale = false;
+
+            foreach (var animal in _animnals)
+            {
+                if (animal.Gender == "G")
+                {
+                    isThereFamale = true;
+                }
+                else if (animal.Gender == "M")
+                {
+                    isThereMale = true;
+                }
+            }
+
+            if (isThereFamale && isThereMale)
+            {
+                Console.WriteLine("both genders");
+            }
+            else if (isThereFamale)
+            {
+                Console.WriteLine("only famale");
+            }
+            else
+            {
+                Console.WriteLine("only male");
+            }
+        }
+    }
+
+    class Animal
+    {
+        public string Species { get; private set; }
+        public string Gender { get; private set; }
+        public string Sound { get; private set; }
+
+        public Animal(string species, string gender, string sound)
+        {
+            Species = species;
+            Gender = gender;
+            Sound = sound;
+        }
+    }
+}
+
+/*Пользователь запускает приложение и перед ним находится меню,
+ * в котором он может выбрать, к какому вольеру подойти. 
+ * При приближении к вольеру, пользователю выводится информация о том,
+ * что это за вольер, сколько животных там обитает,
+ * их пол и какой звук издает животное.
+Вольеров в зоопарке может быть много, в решении нужно создать минимум 4 вольера.*/
