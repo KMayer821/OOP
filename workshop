@@ -13,7 +13,7 @@ namespace ConsoleApp2
 
     class Client
     {
-        private Mashine _mashine = new Mashine();
+        private Car _mashine = new Car();
 
         public Detail AskForHelp()
         {
@@ -27,23 +27,23 @@ namespace ConsoleApp2
 
     class Workshop
     {
-        private static Detail _motor = new Detail(100);
-        private static Detail _chassis = new Detail(50);
-        private static Detail _glass = new Detail(20);
-        private static Detail _transmission = new Detail(80);
+        private Detail _motor = new Detail(100);
+        private Detail _chassis = new Detail(50);
+        private Detail _glass = new Detail(20);
+        private Detail _transmission = new Detail(80);
         private int _money = 500;
-        private List<Detail> _details = new List<Detail>() { _motor, _chassis, _glass, _transmission };
-        private string _userInput;
-        private string _stopWorkWord = "stop";
-        private string _yesWord = "y";
-        private string _noWord = "n";
+        private List<Detail> _details;
         private int _penalty = 100;
         private int _repairMultiplier = 2;
         
+        public Workshop()
+        {
+            _details = new List<Detail>() { _motor, _chassis, _glass, _transmission };
+        }
 
         public void StartWork()
         {
-            while (_userInput != _stopWorkWord && _money != 0)
+            while (_money != 0 && _details.Count != 0)
             {
                 Console.WriteLine("====================================");
                 Console.WriteLine("System: Our money: " + _money);
@@ -57,19 +57,23 @@ namespace ConsoleApp2
 
         public void TakeClient(Client client)
         {
+            string yesWord = "y";
+            string noWord = "n";
             Detail necessaryDetail = client.AskForHelp();
             Console.WriteLine("System: It will " + necessaryDetail.Coast * _repairMultiplier);
-            _userInput = Console.ReadLine();
-            while(_userInput != _yesWord && _userInput != _noWord && _userInput != _stopWorkWord)
+            string userInput = Console.ReadLine();
+
+            while(userInput != yesWord && userInput != noWord)
             {
                 Console.WriteLine("System: Wrong input!");
-                _userInput = Console.ReadLine();
+                userInput = Console.ReadLine();
             }
-            if (_userInput == _yesWord & _details.Contains(necessaryDetail))
+
+            if (userInput == yesWord & _details.Contains(necessaryDetail))
             {
                 HelpClient(necessaryDetail);
             }
-            else if (_userInput == _yesWord & _details.Contains(necessaryDetail) == false)
+            else if (userInput == yesWord & _details.Contains(necessaryDetail) == false)
             {
                 RepairWithWrongDetail();
             }
@@ -84,6 +88,7 @@ namespace ConsoleApp2
             if (_details.Count != 0)
             {
                 Console.Write("System: we have details wich coast: ");
+
                 for (int i = 0; i < _details.Count; i++)
                 {
                     Console.Write(_details[i].Coast + " ");
@@ -128,13 +133,18 @@ namespace ConsoleApp2
         }
     }
 
-    public class Mashine
+    public class Car
     {
-        private static Detail _motor = new Detail(100);
-        private static Detail _chassis = new Detail(50);
-        private static Detail _glass = new Detail(20);
-        private static Detail _transmission = new Detail(80);
-        private List<Detail> _allPossibleDetails = new List<Detail>() { _motor, _chassis, _glass, _transmission };
+        private Detail _motor = new Detail(100);
+        private Detail _chassis = new Detail(50);
+        private Detail _glass = new Detail(20);
+        private Detail _transmission = new Detail(80);
+        private List<Detail> _allPossibleDetails;
+
+        public Car()
+        {
+            _allPossibleDetails = new List<Detail>() { _motor, _chassis, _glass, _transmission };
+        }
 
         public Detail GetDetailByIndex(int index)
         {
