@@ -1,0 +1,176 @@
+using System;
+
+namespace ConsoleApp2
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Workshop workshop = new Workshop();
+            workshop.StartWork();
+        }
+    }
+
+    class Client
+    {
+        private Mashine _mashine = new Mashine();
+
+        public Detail AskForHelp()
+        {
+            Console.Write("Client: - I have an issue wich coast ");
+            Random random = new Random();
+            Detail brokenDetail = _mashine.GetDetailByIndex(random.Next(_mashine.GetNumberOfDetails() - 1));
+            Console.WriteLine(brokenDetail.Coast + " can you help me? (y/n)");
+            return brokenDetail;
+        }
+    }
+
+    class Workshop
+    {
+        private static Detail _motor = new Detail(100);
+        private static Detail _chassis = new Detail(50);
+        private static Detail _glass = new Detail(20);
+        private static Detail _transmission = new Detail(80);
+        private int _money = 500;
+        private List<Detail> _details = new List<Detail>() { _motor, _chassis, _glass, _transmission };
+        private string _userInput;
+        private string _stopWorkWord = "stop";
+        private string _yesWord = "y";
+        private string _noWord = "n";
+        private int _penalty = 100;
+        private int _repairMultiplier = 2;
+        
+
+        public void StartWork()
+        {
+            while (_userInput != _stopWorkWord && _money != 0)
+            {
+                Console.WriteLine("====================================");
+                Console.WriteLine("System: Our money: " + _money);
+                ShowDetails();
+                Client client = new Client();
+                TakeClient(client);
+            }
+            Console.WriteLine("\nSystem: Our money: " + _money);
+            Console.WriteLine("System: End of working day");
+        }
+
+        public void TakeClient(Client client)
+        {
+            Detail necessaryDetail = client.AskForHelp();
+            Console.WriteLine("System: It will " + necessaryDetail.Coast * _repairMultiplier);
+            _userInput = Console.ReadLine();
+            while(_userInput != _yesWord && _userInput != _noWord && _userInput != _stopWorkWord)
+            {
+                Console.WriteLine("System: Wrong input!");
+                _userInput = Console.ReadLine();
+            }
+            if (_userInput == _yesWord & _details.Contains(necessaryDetail))
+            {
+                HelpClient(necessaryDetail);
+            }
+            else if (_userInput == _yesWord & _details.Contains(necessaryDetail) == false)
+            {
+                RepairWithWrongDetail();
+            }
+            else
+            {
+                DenyClient();
+            }
+        }
+
+        private void ShowDetails()
+        {
+            if (_details.Count != 0)
+            {
+                Console.Write("System: we have details wich coast: ");
+                for (int i = 0; i < _details.Count; i++)
+                {
+                    Console.Write(_details[i].Coast + " ");
+                }
+                Console.WriteLine();
+            }
+            else
+            {
+                Console.WriteLine("System: we don't have any details");
+            }
+        }
+
+        private void RepairWithWrongDetail()
+        {
+            Random random = new Random();
+            _details.RemoveAt(random.Next(_details.Count));
+            Console.WriteLine("Client: - It's not working!");
+            GetPenalty();
+        }
+
+        private void HelpClient(Detail detail)
+        {
+            _details.Remove(detail);
+            _money += detail.Coast * _repairMultiplier;
+            Console.WriteLine("System: Nice job!");
+        }
+
+        private void DenyClient()
+        {
+            Console.WriteLine("Owner: - We can't help you");
+            GetPenalty();
+        }
+
+        private void GetPenalty()
+        {
+            _money -= _penalty;
+            if (_money < 0)
+            {
+                _money = 0;
+            }
+            Console.WriteLine("System: You have penalty");
+        }
+    }
+
+    public class Mashine
+    {
+        private static Detail _motor = new Detail(100);
+        private static Detail _chassis = new Detail(50);
+        private static Detail _glass = new Detail(20);
+        private static Detail _transmission = new Detail(80);
+        private List<Detail> _allPossibleDetails = new List<Detail>() { _motor, _chassis, _glass, _transmission };
+
+        public Detail GetDetailByIndex(int index)
+        {
+            return _allPossibleDetails[index];
+        }
+
+        public int GetNumberOfDetails()
+        {
+            return _allPossibleDetails.Count;
+        }
+    }
+
+    public struct Detail
+    {
+        public int Coast { get; private set; }
+
+        public Detail(int coast)
+        {
+            Coast = coast;
+        }
+    }
+}
+/*
+У вас есть автосервис, в который приезжают люди, чтобы починить свои автомобили.
+У вашего автосервиса есть баланс денег и склад деталей.
+Когда приезжает автомобиль, у него сразу ясна его поломка,
+и эта поломка отображается у вас в консоли 
+вместе с ценой за починку(цена за починку складывается из цены детали + цена за работу).
+Поломка всегда чинится заменой детали, но количество деталей ограничено тем,
+что находится на вашем складе деталей.
+Если у вас нет нужной детали на складе, то вы можете отказать клиенту,
+и в этом случае вам придется выплатить штраф.
+Если вы замените не ту деталь, то вам придется возместить ущерб клиенту.
+За каждую удачную починку вы получаете выплату за ремонт,
+которая указана в чек-листе починки.
+Класс Деталь не может содержать значение “количество”.
+Деталь всего одна, за количество отвечает тот, кто хранит детали.
+При необходимости можно создать дополнительный класс для конкретной детали и работе с количеством.
+*/
